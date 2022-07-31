@@ -1,12 +1,12 @@
-var config = require('../config');
+var config = require("../config");
 
-// 发帖时间间隔，为毫秒
+// Post time interval, in milliseconds
 var POST_INTERVAL = config.post_interval;
 if (!(POST_INTERVAL > 0)) POST_INTERVAL = 0;
 var DISABLE_POST_INTERVAL = POST_INTERVAL > 0 ? false : true;
 
 /**
- * 发帖/评论时间间隔限制
+ * Post/comment time interval limit
  */
 exports.postInterval = function (req, res, next) {
   if (DISABLE_POST_INTERVAL) return next();
@@ -15,8 +15,8 @@ exports.postInterval = function (req, res, next) {
     return next();
   }
   if (Date.now() - req.session.lastPostTimestamp < POST_INTERVAL) {
-    var ERROR_MSG = '您的回复速度太快。';
-    res.render('notify/notify', {error: ERROR_MSG});
+    var ERROR_MSG = "Your reply was too fast. ";
+    res.render("notify/notify", { error: ERROR_MSG });
     return;
   }
 

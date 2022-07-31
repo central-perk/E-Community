@@ -76,7 +76,7 @@ Dropzone = (function(_super) {
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           file = _ref[_i];
           if (!_this.validFile(file)) {
-            alert("「" + file.name + "]」文件不是图片。");
+            alert(""" + file.name + "]" The file is not a picture.");
             _this.hide();
             return false;
           }

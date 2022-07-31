@@ -1,7 +1,8 @@
 <% if (topic.top) { %>
-<span class='put-top'>置顶</span>
+<span class="put-top">Put to top</span>
 <% } else if (topic.good) { %>
-<span class='put-good'>精华</span>
-<% } else if (typeof(tab) !== 'undefined' &&  tab === 'all' && topic.tabName) { %>
+<span class="put-good">Essence</span>
+<% } else if (typeof(tab) !== 'undefined' && tab === 'all' && topic.tabName) {
+%>
 <span class="topiclist-tab"><%= topic.tabName %></span>
 <% } %>

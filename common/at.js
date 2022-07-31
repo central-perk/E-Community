@@ -2,42 +2,41 @@
  * nodeclub - topic mention user controller.
  * Copyright(c) 2012 fengmk2 <fengmk2@gmail.com>
  * Copyright(c) 2012 muyuan
- * MIT Licensed
+ *MIT Licensed
  */
 
 /**
  * Module dependencies.
  */
 
-var User = require('../proxy').User;
-var Message = require('./message');
-var EventProxy = require('eventproxy');
-var _ = require('lodash');
+var User = require("../proxy").User;
+var Message = require("./message");
+var EventProxy = require("eventproxy");
+var _ = require("lodash");
 
 /**
- * 从文本中提取出@username 标记的用户名数组
- * @param {String} text 文本内容
- * @return {Array} 用户名数组
+ * Extract the array of usernames tagged with @username from the text
+ * @param {String} text text content
+ * @return {Array} username array
  */
 var fetchUsers = function (text) {
   var ignoreRegexs = [
-    /```.+?```/g, // 去除单行的 ```
-    /^```[\s\S]+?^```/gm, // ``` 里面的是 pre 标签内容
-    /`[\s\S]+?`/g, // 同一行中，`some code` 中内容也不该被解析
-    /^    .*/gm, // 4个空格也是 pre 标签，在这里 . 不会匹配换行
-    /\b.*?@[^\s]*?\..+?\b/g, // somebody@gmail.com 会被去除
-    /\[@.+?\]\(\/.+?\)/g, // 已经被 link 的 username
+    /```.+?```/g, // remove single line ```
+    /^```[\s\S]+?^```/gm, // ``` contains the content of the pre tag
+    /`[\s\S]+?`/g, // On the same line, `some code` should also not be parsed
+    /^ .*/gm, // 4 spaces are also pre tags, here . will not match newlines
+    /\b.*?@[^\s]*?\..+?\b/g, // somebody@gmail.com will be stripped
+    /\[@.+?\]\(\/.+?\)/g, // username that has been linked
   ];
 
-
   ignoreRegexs.forEach(function (ignore_regex) {
-    text = text.replace(ignore_regex, '');
+    text = text.replace(ignore_regex, "");
   });
 
-  var results = text.match(/@[a-z0-9\-_\u4e00-\u9fa5]+?\</igm),
-      names = [];
+  var results = text.match(/@[a-z0-9\-_\u4e00-\u9fa5]+?\</gim),
+    names = [];
 
-  _.forEach(results, function(result, index) {
+  _.forEach(results, function (result, index) {
     names.push(result.slice(1, -1));
   });
 
@@ -47,17 +46,23 @@ var fetchUsers = function (text) {
 exports.fetchUsers = fetchUsers;
 
 /**
- * 根据文本内容中读取用户，并发送消息给提到的用户
+ * Read the user according to the text content and send a message to the mentioned user
  * Callback:
- * - err, 数据库异常
- * @param {String} text 文本内容
- * @param {String} topicId 主题ID
- * @param {String} authorId 作者ID
- * @param {String} reply_id 回复ID
- * @param {Function} callback 回调函数
+ * - err, database exception
+ * @param {String} text text content
+ * @param {String} topicId topic ID
+ * @param {String} authorId Author ID
+ * @param {String} reply_id reply id
+ * @param {Function} callback callback function
  */
-exports.sendMessageToMentionUsers = function (text, topicId, authorId, reply_id, callback) {
-  if (typeof reply_id === 'function') {
+exports.sendMessageToMentionUsers = function (
+  text,
+  topicId,
+  authorId,
+  reply_id,
+  callback
+) {
+  if (typeof reply_id === "function") {
     callback = reply_id;
     reply_id = null;
   }
@@ -69,22 +74,28 @@ exports.sendMessageToMentionUsers = function (text, topicId, authorId, reply_id,
     }
     var ep = new EventProxy();
     ep.fail(callback);
-    ep.after('sent', users.length, function () {
+    ep.after("sent", users.length, function () {
       callback();
     });
     users.forEach(function (user) {
-      Message.sendAtMessage(user._id, authorId, topicId, reply_id, ep.done('sent'));
+      Message.sendAtMessage(
+        user._id,
+        authorId,
+        topicId,
+        reply_id,
+        ep.done("sent")
+      );
     });
   });
 };
 
 /**
- * 根据文本内容，替换为数据库中的数据
+ * According to the text content, replace with the data in the database
  * Callback:
- * - err, 数据库异常
- * - text, 替换后的文本内容
- * @param {String} text 文本内容
- * @param {Function} callback 回调函数
+ * - err, database exception
+ * - text, the replaced text content
+ * @param {String} text text content
+ * @param {Function} callback callback function
  */
 exports.linkUsers = function (text, callback) {
   var users = fetchUsers(text);

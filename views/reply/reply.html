@@ -1,88 +1,88 @@
 <div class='cell reply_area reply-item
-	<%- reply.ups && reply.ups.length > 0 && reply.ups.length >= topic.reply_up_threshold ? 'reply_highlight' : '' %>'
-	id="reply<%= indexInCollection+1 %>" reply-id="<%= reply._id %>" reply_to_id="<%= reply.reply_id || '' %>">
-	<a class="anchor"  id="<%= reply._id %>"></a>
+<%- reply.ups && reply.ups.length > 0 && reply.ups.length >= topic.reply_up_threshold ? 'reply_highlight' : '' %>'
+id="reply<%= indexInCollection+1 %>" reply-id="<%= reply._id %>" reply_to_id="<%= reply.reply_id || '' %>">
+<a class="anchor" id="<%= reply._id %>"></a>
 
-	<a class="user-avatar pull-left" href="/user/<%= reply.author.loginname %>" target="_blank">
-		<img src="<%= reply.author.avatar_url %>" title="<%= reply.author.loginname %>"/>
-	</a>
+<a class="user-avatar pull-left" href="/user/<%= reply.author.loginname %>" target="_blank">
+<img src="<%= reply.author.avatar_url %>" title="<%= reply.author.loginname %>"/>
+</a>
 
-	<div class="reply-wrap">
-		<div class="info">
-			<!-- 用户主页，先行注释 -->
-			<!-- <a class="author-loginname" href="/user/<%= reply.author.loginname %>"><%= reply.author.loginname %></a> -->
-			<a class="author-loginname" href="/user/<%= reply.author.loginname %>" target="_blank"><%= reply.author.loginname %></a>
+<div class="reply-wrap">
+<div class="info">
+<!-- User homepage, pre-comment -->
+<!-- <a class="author-loginname" href="/user/<%= reply.author.loginname %>"><%= reply.author.loginname %></a> -->
+<a class="author-loginname" href="/user/<%= reply.author.loginname %>" target="_blank"><%= reply.author.loginname %></a>
 
-			于<%= reply.friendly_create_at%>说道：
-
-
-			<span class="pull-right">
-				<% if(typeof(current_user) !== 'undefined'){ %>
-					<i class="fa fa-reply reply2_btn" title="回复"></i>
-				<% } %>
-			</span>
+Yu <%= reply.friendly_create_at%> said:
 
 
+<span class="pull-right">
+<% if(typeof(current_user) !== 'undefined'){ %>
+<i class="fa fa-reply reply2_btn" title="Reply"></i>
+<% } %>
+</span>
 
 
-			<% if ( typeof(current_user) !== 'undefined' && current_user.is_admin ||
-				(typeof(current_user) !== 'undefined' && current_user._id.toString() == reply.author._id.toString())
-				) { %>
-				<a href='/reply/<%= reply._id %>/edit' class='edit_reply_btn pull-right'>
-					<i class="fa fa-pencil-square-o" title='编辑'></i>
-				</a>
-				<a href='javascript:void(0);' class='delete_reply_btn pull-right'>
-					<i class="fa fa-trash" title='删除'></i>
-				</a>
-			<% } %>
 
 
-			<span class="up-count pull-right">
-				<%= reply.ups && reply.ups.length ? reply.ups.length : '' %>
-			</span>
+<% if ( typeof(current_user) !== 'undefined' && current_user.is_admin ||
+(typeof(current_user) !== 'undefined' && current_user._id.toString() == reply.author._id.toString())
+) { %>
+<a href='/reply/<%= reply._id %>/edit' class='edit_reply_btn pull-right'>
+<i class="fa fa-pencil-square-o" title='Edit'></i>
+</a>
+<a href='javascript:void(0);' class='delete_reply_btn pull-right'>
+<i class="fa fa-trash" title='Delete'></i>
+</a>
+<% } %>
 
-			<span class="up-btn pull-right">
-				赞
-			</span>
 
-			<a class="reply_time pull-right" href="#<%= reply._id %>"><%= indexInCollection + 1 %>楼</a>
+<span class="up-count pull-right">
+<%= reply.ups && reply.ups.length ? reply.ups.length : '' %>
+</span>
+
+<span class="up-btn pull-right">
+				awesome
+</span>
+
+<a class="reply_time pull-right" href="#<%= reply._id %>"><%= indexInCollection + 1 %>floor</a>
 
 
 
 <!--
-			<span>
-				<i class="fa up_btn
-					<%= (typeof current_user !== 'undefined' && isUped(current_user, reply)) ? 'fa-thumbs-up uped' : 'fa-thumbs-o-up' %>" title="喜欢"></i>
+<span>
+<i class="fa up_btn
+<%= (typeof current_user !== 'undefined' && isUped(current_user, reply)) ? 'fa-thumbs-up uped' : 'fa-thumbs-o-up' %>" title="like"></ i>
 
-			</span> -->
-		</div>
-		<div class='reply-content from-<%= reply.author.loginname %>'>
-			<%- reply.content%>
-		</div>
-	</div>
-
-
-
-	<div class='reply2_area'>
-		<% if (typeof(current_user) !== 'undefined') { %>
-		<form class='reply2_form' action='/<%= topic._id %>/reply' method='post'>
-			<input type='hidden' name='_csrf' value='<%= csrf %>'/>
-			<input type='hidden' name='reply_id' value='<%= reply._id %>'/>
-
-			<div class='markdown_editor in_editor'>
-				<div class='markdown_in_editor'>
-					<textarea class='editor reply_editor'
-						id="reply2_editor_<%= reply._id %>" name='r_content' rows='4'></textarea>
-
-					<div class='editor_buttons'>
-						<input class="btn btn-green btn-lg reply2_submit_btn submit_btn" type="submit" data-loading-text="回复中.." value="回复">
+</span> -->
+</div>
+<div class='reply-content from-<%= reply.author.loginname %>'>
+<%- reply.content%>
+</div>
+</div>
 
 
-					</div>
-				</div>
-			</div>
-		</form>
-		<% } %>
-	</div>
+
+<div class='reply2_area'>
+<% if (typeof(current_user) !== 'undefined') { %>
+<form class='reply2_form' action='/<%= topic._id %>/reply' method='post'>
+<input type='hidden' name='_csrf' value='<%= csrf %>'/>
+<input type='hidden' name='reply_id' value='<%= reply._id %>'/>
+
+<div class='markdown_editor in_editor'>
+<div class='markdown_in_editor'>
+<textarea class='editor reply_editor'
+id="reply2_editor_<%= reply._id %>" name='r_content' rows='4'></textarea>
+
+<div class='editor_buttons'>
+<input class="btn btn-green btn-lg reply2_submit_btn submit_btn" type="submit" data-loading-text="Replying.." value="Reply">
+
+
+</div>
+</div>
+</div>
+</form>
+<% } %>
+</div>
 
 </div>

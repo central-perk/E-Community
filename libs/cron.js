@@ -1,56 +1,62 @@
-var config = require('../config'),
-	fs = require('fs-extra'),
-	cronJob = require('cron').CronJob,
-	rootPath = config.PATHS.root,
-	mongodbBackuper = require('mongodb-backuper'),
-	path = require('path');
+var config = require("../config"),
+  fs = require("fs-extra"),
+  cronJob = require("cron").CronJob,
+  rootPath = config.PATHS.root,
+  mongodbBackuper = require("mongodb-backuper"),
+  path = require("path");
 
-// 数据库定时备份
-var jobDBBackup = new cronJob(config.TIME.midnight, function() {
-	backupClubDb();
-	backupEcdDb();
-}, null, true, 'Asia/Shanghai');
+// Database scheduled backup
+var jobDBBackup = new cronJob(
+  config.TIME.midnight,
+  function () {
+    backupClubDb();
+    backupEcdDb();
+  },
+  null,
+  true,
+  "Asia/Shanghai"
+);
 
-//备份社区数据库
+// backup community database
 function backupClubDb() {
-	var dbBackupPath;
-	if (config.isproduction) {
-		dbBackupPath = path.join(rootPath, '..', 'mnt', 'vdc1', 'club_db_backup');
-	} else {
-		dbBackupPath = path.join(rootPath, '..', 'club_db_backup', 'db');
-	}
-	// 确保数据库备份文件夹存在
-	fs.ensureDirSync(dbBackupPath);
+  var dbBackupPath;
+  if (config.isproduction) {
+    dbBackupPath = path.join(rootPath, "..", "mnt", "vdc1", "club_db_backup");
+  } else {
+    dbBackupPath = path.join(rootPath, "..", "club_db_backup", "db");
+  }
+  // Make sure the database backup folder exists
+  fs.ensureDirSync(dbBackupPath);
 
-	mongodbBackuper.init({
-		// 备份数据存储父级目录
-		path: dbBackupPath,
-		// 数据库连接
-		host: config.clubDb.host,
-		// 数据库名称
-		name: config.clubDb.name
-	});
+  mongodbBackuper.init({
+    // Backup datastore parent directory
+    path: dbBackupPath,
+    // Database linkage
+    host: config.clubDb.host,
+    // Name database
+    name: config.clubDb.name,
+  });
 }
 
-//备份易传单数据
+// Backup Easy Leaflet data
 function backupEcdDb() {
-	var dbBackupPath;
-	if (config.isproduction) {
-		dbBackupPath = path.join(rootPath, '..', 'mnt', 'vdc1', 'ecd_db_backup');
-	} else {
-		dbBackupPath = path.join(rootPath, '..', 'ecd_db_backup', 'db');
-	}
-	// 确保数据库备份文件夹存在
-	fs.ensureDirSync(dbBackupPath);
+  var dbBackupPath;
+  if (config.isproduction) {
+    dbBackupPath = path.join(rootPath, "..", "mnt", "vdc1", "ecd_db_backup");
+  } else {
+    dbBackupPath = path.join(rootPath, "..", "ecd_db_backup", "db");
+  }
+  // Make sure the database backup folder exists
+  fs.ensureDirSync(dbBackupPath);
 
-	mongodbBackuper.init({
-		// 备份数据存储父级目录
-		path: dbBackupPath,
-		// 数据库连接
-		host: config.ecdDb.host,
-		// 数据库名称
-		name: config.ecdDb.name
-	});
+  mongodbBackuper.init({
+    // Backup datastore parent directory
+    path: dbBackupPath,
+    // Database linkage
+    host: config.ecdDb.host,
+    // Name database
+    name: config.ecdDb.name,
+  });
 }
 
 // backupClubDb();

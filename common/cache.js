@@ -1,5 +1,4 @@
-
-var mcache = require('memory-cache');
+var mcache = require("memory-cache");
 
 var get = function (key, callback) {
   setImmediate(function () {
@@ -9,9 +8,9 @@ var get = function (key, callback) {
 
 exports.get = get;
 
-// time 参数可选，毫秒为单位
+// The time parameter is optional, in milliseconds
 var set = function (key, value, time, callback) {
-  if (typeof time === 'function') {
+  if (typeof time === "function") {
     callback = time;
     time = null;
   }

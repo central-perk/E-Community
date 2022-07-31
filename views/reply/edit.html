@@ -1,79 +1,106 @@
-<div id='content'>
-	<div class='panel'>
-		<div class='header'>
-			<ol class='breadcrumb'>
-				<li class='active'>编辑回复</li>
-			</ol>
+<div id="content">
+  <div class="panel">
+    <div class="header">
+      <ol class="breadcrumb">
+        <li class="active">Edit reply</li>
+      </ol>
 
-			<div class='inner post'>
-				<% if(typeof(edit_error) !== 'undefined' && edit_error){ %>
-				<div class="alert alert-error">
-					<a class="close" data-dismiss="alert" href="#">&times;</a>
-					<strong><%= edit_error %></strong>
-				</div>
-				<% } %>
-				<% if(typeof(error) !== 'undefined' && error){ %>
-				<div class="alert alert-error">
-					<strong><%= error %></strong>
-				</div>
-				<% } else { %>
-				<form id='edit_reply_form' action='/reply/<%= reply_id %>/edit' method='post'>
-					<fieldset>
-						<div class='markdown_editor in_editor'>
-							<div class='markdown_in_editor'>
-								<textarea class='editor' name='t_content' rows='20'
-									placeholder=''
-									autofocus>
-									<%= typeof(content) !== 'undefined' && content || '' %>
-								</textarea>
+      <div class="inner post">
+        <% if(typeof(edit_error) !== 'undefined' && edit_error){ %>
+        <div class="alert alert-error">
+          <a class="close" data-dismiss="alert" href="#">&times;</a>
+          <strong><%= edit_error %></strong>
+        </div>
+        <% } %> <% if(typeof(error) !== 'undefined' && error){ %>
+        <div class="alert alert-error">
+          <strong><%= error %></strong>
+        </div>
+        <% } else { %>
+        <form
+          id="edit_reply_form"
+          action="/reply/<%= reply_id %>/edit"
+          method="post"
+        >
+          <fieldset>
+            <div class="markdown_editor in_editor">
+              <div class="markdown_in_editor">
+                <textarea
+                  class="editor"
+                  name="t_content"
+                  rows="20"
+                  placeholder=""
+                  autofocus
+                >
+	<%= typeof(content) !== 'undefined' && content || '' %>
+	</textarea
+                >
 
-								<div class='editor_buttons'>
-									<input type="submit" class='btn btn-green btn-lg submit_btn'
-										data-loading-text="提交中.."
-										value="提交">
-								</div>
-							</div>
-						</div>
-						<input type='hidden' name='_csrf' value='<%= csrf %>'/>
-					</fieldset>
-				</form>
-			</div>
-		</div>
-		<% } %>
-	</div>
+                <div class="editor_buttons">
+                  <input
+                    type="submit"
+                    class="btn btn-green btn-lg submit_btn"
+                    data-loading-text="Submitting.."
+                    value="Submit"
+                  />
+                </div>
+              </div>
+            </div>
+            <input type="hidden" name="_csrf" value="<%= csrf %>" />
+          </fieldset>
+        </form>
+      </div>
+    </div>
+    <% } %>
+  </div>
 </div>
 
 <!-- simditor editor -->
 <%- Loader('/public/simditor.min.js')
-		.js('/public/libs/simditor/scripts/module.js')
-		.js('/public/libs/simditor/scripts/hotkeys.js')
-		.js('/public/libs/simditor/scripts/uploader.js')
-		.js('/public/libs/simditor/scripts/simditor.js')
-		.js('/public/libs/simditor/scripts/dropzone.js')
-	.done(assets, config.site_static_host, config.mini_assets)
-%>
+.js('/public/libs/simditor/scripts/module.js')
+.js('/public/libs/simditor/scripts/hotkeys.js')
+.js('/public/libs/simditor/scripts/uploader.js')
+.js('/public/libs/simditor/scripts/simditor.js')
+.js('/public/libs/simditor/scripts/dropzone.js') .done(assets,
+config.site_static_host, config.mini_assets) %>
 <script>
-	(function () {
-		var editor = new Simditor({
-			textarea: $('.editor'),
-			toolbar:[ 'title' , 'bold','italic' , 'underline','strikethrough' ,'color' , 'ol' ,'ul' ,'blockquote', 'code', 'table' , 'link', 'image' , 'hr' , 'indent' , 'outdent'],
-			upload: {
-				url: '/upload',
-				connectionCount:1
-			}
-		});
+  (function () {
+    var editor = new Simditor({
+      textarea: $(".editor"),
+      toolbar: [
+        "title",
+        "bold",
+        "italic",
+        "underline",
+        "strikethrough",
+        "color",
+        "ol",
+        "ul",
+        "blockquote",
+        "code",
+        "table",
+        "link",
+        "image",
+        "hr",
+        "indent",
+        "outdent",
+      ],
+      upload: {
+        url: "/upload",
+        connectionCount: 1,
+      },
+    });
 
-		$('.simditor-body').on('keyup focus', function() {
-			var value = $(this).text();
-			if (!$(this).find('img').length) {
-				if (value.length > 0 && value.length < 1000 ) {
-					$('.submit_btn').removeClass('disabled');
-				} else {
-					$('.submit_btn').addClass('disabled');
-				}
-			} else {
-				$('.submit_btn').removeClass('disabled');
-			}
-		});
-	})();
+    $(".simditor-body").on("keyup focus", function () {
+      var value = $(this).text();
+      if (!$(this).find("img").length) {
+        if (value.length > 0 && value.length < 1000) {
+          $(".submit_btn").removeClass("disabled");
+        } else {
+          $(".submit_btn").addClass("disabled");
+        }
+      } else {
+        $(".submit_btn").removeClass("disabled");
+      }
+    });
+  })();
 </script>

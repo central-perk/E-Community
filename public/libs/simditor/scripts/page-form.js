@@ -1,26 +1,69 @@
-(function() {
-  $(function() {
+(function () {
+  $(function () {
     var editor;
     editor = new Simditor({
-      textarea: $('#txt-content1'),
-      placeholder: '这里输入文字...',
+      textarea: $("#txt-content1"),
+      placeholder: "Enter text here...",
       pasteImage: true,
-      toolbar: ['title', 'bold', 'italic', 'underline', 'strikethrough', '|', 'ol', 'ul', 'blockquote', 'code', 'table', '|', 'link', 'image', 'hr', '|', 'indent', 'outdent'],
-      defaultImage: 'assets/images/image.png',
-      upload: location.search === '?upload' ? {
-        url: '/upload'
-      } : false
+      toolbar: [
+        "title",
+        "bold",
+        "italic",
+        "underline",
+        "strikethrough",
+        "|",
+        "ol",
+        "ul",
+        "blockquote",
+        "code",
+        "table",
+        "|",
+        "link",
+        "image",
+        "hr",
+        "|",
+        "indent",
+        "outdent",
+      ],
+      defaultImage: "assets/images/image.png",
+      upload:
+        location.search === "?upload"
+          ? {
+              url: "/upload",
+            }
+          : false,
     });
-    return editor = new Simditor({
-      textarea: $('#txt-content2'),
-      placeholder: '这里输入文字...',
+    return (editor = new Simditor({
+      textarea: $("#txt-content2"),
+      placeholder: "Enter text here...",
       pasteImage: true,
-      toolbar: ['title', 'bold', 'italic', 'underline', 'strikethrough', '|', 'ol', 'ul', 'blockquote', 'code', 'table', '|', 'link', 'image', 'hr', '|', 'indent', 'outdent'],
-      defaultImage: 'assets/images/image.png',
-      upload: location.search === '?upload' ? {
-        url: '/upload'
-      } : false
-    });
+      toolbar: [
+        "title",
+        "bold",
+        "italic",
+        "underline",
+        "strikethrough",
+        "|",
+        "ol",
+        "ul",
+        "blockquote",
+        "code",
+        "table",
+        "|",
+        "link",
+        "image",
+        "hr",
+        "|",
+        "indent",
+        "outdent",
+      ],
+      defaultImage: "assets/images/image.png",
+      upload:
+        location.search === "?upload"
+          ? {
+              url: "/upload",
+            }
+          : false,
+    }));
   });
-
-}).call(this);
+}.call(this));

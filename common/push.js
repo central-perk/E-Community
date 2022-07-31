@@ -1,44 +1,46 @@
-var User = require('../proxy/user');
-var Message = require('../proxy/message');
+var User = require("../proxy/user");
+var Message = require("../proxy/message");
 var JPush = require("jpush-sdk");
-var eventproxy = require('eventproxy');
-var config = require('../config');
+var eventproxy = require("eventproxy");
+var config = require("../config");
 var client = null;
-if (config.jpush && config.jpush.secretKey !== 'your secret key') {
+if (config.jpush && config.jpush.secretKey !== "your secret key") {
   client = JPush.buildClient(config.jpush.appKey, config.jpush.secretKey);
 }
 
 /**
- * 通过极光推送发生消息通知
- * @param {String} type 消息类型
- * @param {String} author_id 消息作者ID
- * @param {String} master_id 被通知者ID
- * @param {String} topic_id 相关主题ID
+ * Notification of occurrence of news through Jiguang push
+ * @param {String} type message type
+ * @param {String} author_id message author ID
+ * @param {String} master_id Notifier ID
+ * @param {String} topic_id related topic ID
  */
 exports.send = function (type, author_id, master_id, topic_id) {
   if (client !== null) {
     var ep = new eventproxy();
-    User.getUserById(author_id, ep.done('author'));
-    Message.getMessagesCount(master_id, ep.done('count'));
-    ep.all('author', 'count', function (author, count) {
-      var msg = author.loginname + ' ';
+    User.getUserById(author_id, ep.done("author"));
+    Message.getMessagesCount(master_id, ep.done("count"));
+    ep.all("author", "count", function (author, count) {
+      var msg = author.loginname + " ";
       var extras = {
-        topicId: topic_id
+        topicId: topic_id,
       };
       switch (type) {
-      case 'at':
-        msg += '@了你';
-        break;
-      case 'reply':
-        msg += '回复了你的主题';
-        break;
-      default:
-        break;
+        case "at":
+          msg += "@you";
+          break;
+        case "reply":
+          msg += "replied to your thread";
+          break;
+        default:
+          break;
       }
-      client.push()
+      client
+        .push()
         .setPlatform(JPush.ALL)
         .setAudience(JPush.alias(master_id.toString()))
-        .setNotification(msg,
+        .setNotification(
+          msg,
           JPush.ios(msg, null, count, null, extras),
           JPush.android(msg, null, null, extras)
         )
@@ -48,11 +50,11 @@ exports.send = function (type, author_id, master_id, topic_id) {
             if (err) {
               console.log(err.message);
             } else {
-              console.log('Sendno: ' + res.sendno);
-              console.log('Msg_id: ' + res.msg_id);
+              console.log("Sendno: " + res.sendno);
+              console.log("Msg_id: " + res.msg_id);
             }
           }
         });
-    })
+    });
   }
 };

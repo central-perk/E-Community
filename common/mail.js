@@ -1,22 +1,22 @@
-var mailer = require('nodemailer');
-var config = require('../config');
-var util = require('util');
+var mailer = require("nodemailer");
+var config = require("../config");
+var util = require("util");
 
-var transport = mailer.createTransport('SMTP', config.mail_opts);
-var SITE_ROOT_URL = 'http://' + config.host;
+var transport = mailer.createTransport("SMTP", config.mail_opts);
+var SITE_ROOT_URL = "http://" + config.host;
 
 /**
  * Send an email
- * @param {Object} data 邮件对象
+ * @param {Object} data mail object
  */
 var sendMail = function (data) {
   if (config.debug) {
     return;
   }
-  // 遍历邮件数组，发送每一封邮件，如果有发送失败的，就再压入数组，同时触发mailEvent事件
+  // Traverse the mail array, send each mail, if there is a failure to send, it will be pushed into the array, and the mailEvent event will be triggered at the same time
   transport.sendMail(data, function (err) {
     if (err) {
-      // 写为日志
+      // write as log
       console.log(err);
     }
   });
@@ -24,49 +24,79 @@ var sendMail = function (data) {
 exports.sendMail = sendMail;
 
 /**
- * 发送激活通知邮件
- * @param {String} who 接收人的邮件地址
- * @param {String} token 重置用的token字符串
- * @param {String} name 接收人的用户名
+ * Send activation notification email
+ * @param {String} who recipient's email address
+ * @param {String} The token string used for token reset
+ * @param {String} name recipient's username
  */
 exports.sendActiveMail = function (who, token, name) {
-  var from = util.format('%s <%s>', config.name, config.mail_opts.auth.user);
+  var from = util.format("%s <%s>", config.name, config.mail_opts.auth.user);
   var to = who;
-  var subject = config.name + '社区帐号激活';
-  var html = '<p>您好：' + name + '</p>' +
-    '<p>我们收到您在' + config.name + '社区的注册信息，请点击下面的链接来激活帐户：</p>' +
-    '<a href="' + SITE_ROOT_URL + '/active_account?key=' + token + '&name=' + name + '">激活链接</a>' +
-    '<p>若您没有在' + config.name + '社区填写过注册信息，说明有人滥用了您的电子邮箱，请删除此邮件，我们对给您造成的打扰感到抱歉。</p>' +
-    '<p>' + config.name + '社区 谨上。</p>';
+  var subject = config.name + "community account activation";
+  var html =
+    "<p>Hello:" +
+    name +
+    "</p>" +
+    "<p>We have received your registration in the " +
+    config.name +
+    " community, please click the link below to activate your account:</p>" +
+    '<a href="' +
+    SITE_ROOT_URL +
+    "/active_account?key=" +
+    token +
+    "&name=" +
+    name +
+    '">active link</a>' +
+    "<p>If you have not filled out the registration information in the " +
+    config.name +
+    " community, it means that someone has abused your email address, please delete this email, we are sorry for the inconvenience caused. </p>" +
+    "<p>" +
+    config.name +
+    "Community Sincerely. </p>";
 
   exports.sendMail({
     from: from,
     to: to,
     subject: subject,
-    html: html
+    html: html,
   });
 };
 
 /**
- * 发送密码重置通知邮件
- * @param {String} who 接收人的邮件地址
- * @param {String} token 重置用的token字符串
- * @param {String} name 接收人的用户名
+ * Send password reset notification email
+ * @param {String} who recipient's email address
+ * @param {String} The token string used for token reset
+ * @param {String} name recipient's username
  */
 exports.sendResetPassMail = function (who, token, name) {
-  var from = util.format('%s <%s>', config.name, config.mail_opts.auth.user);
+  var from = util.format("%s <%s>", config.name, config.mail_opts.auth.user);
   var to = who;
-  var subject = config.name + '社区密码重置';
-  var html = '<p>您好：' + name + '</p>' +
-    '<p>我们收到您在' + config.name + '社区重置密码的请求，请在24小时内单击下面的链接来重置密码：</p>' +
-    '<a href="' + SITE_ROOT_URL + '/reset_pass?key=' + token + '&name=' + name + '">重置密码链接</a>' +
-    '<p>若您没有在' + config.name + '社区填写过注册信息，说明有人滥用了您的电子邮箱，请删除此邮件，我们对给您造成的打扰感到抱歉。</p>' +
-    '<p>' + config.name + '社区 谨上。</p>';
+  var subject = config.name + "community password reset";
+  var html =
+    "<p>Hello:" +
+    name +
+    "</p>" +
+    "<p>We have received your request to reset your password in the " +
+    config.name +
+    " community, please click the link below to reset your password within 24 hours:</p>" +
+    '<a href="' +
+    SITE_ROOT_URL +
+    "/reset_pass?key=" +
+    token +
+    "&name=" +
+    name +
+    '">reset password link</a>' +
+    "<p>If you have not filled out the registration information in the " +
+    config.name +
+    " community, it means that someone has abused your email address, please delete this email, we are sorry for the inconvenience caused. </p>" +
+    "<p>" +
+    config.name +
+    "Community Sincerely. </p>";
 
   exports.sendMail({
     from: from,
     to: to,
     subject: subject,
-    html: html
+    html: html,
   });
 };

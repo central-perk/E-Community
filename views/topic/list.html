@@ -1,60 +1,67 @@
 <div id="topic-list">
-	<%- partial('./abstract', {collection:topics, as:'topic'}) %>
+  <%- partial('./abstract', {collection:topics, as:'topic'}) %>
 </div>
-
 
 <!-- <%- tab %> -->
 <div class="paging">
-	<ul class='pagewrap' current_page='<%= current_page %>'>
-		<% var base_url = base + '?tab='+ tab + '&page=';%>
-		<% if (current_page == 1) { %>
-		<li class='disabled'><a><i class="fa fa-angle-left"></i><span class="hide-on-mobile">首页</span></a></li>
-		<% } else { %>
-		<li><a href="<%= base_url %>1"><i class="fa fa-angle-left"></i><span class="hide-on-mobile">首页</span></a></li>
-		<% } %>
+  <ul class="pagewrap" current_page="<%= current_page %>">
+    <% var base_url = base + '?tab='+ tab + '&page=';%> <% if (current_page ==
+    1) { %>
+    <li class="disabled">
+      <a
+        ><i class="fa fa-angle-left"></i
+        ><span class="hide-on-mobile">Home</span></a
+      >< /li> <% } else { %>
+    </li>
 
-		<%
-		var page_start = current_page - 2 > 0 ? current_page - 2 : 1;
-		var page_end = page_start + 4 >= pages ? pages : page_start + 4;
-		%>
-
-		<% if (page_start > 1) { %>
-		<li class="disabled"><a>...</a></li>
-		<% } %>
-
-		<% for(var i = page_start; i <= page_end; i++) { %>
-		<% if (i === current_page) { %>
-		<li class='disabled'><a><%= i %></a></li>
-		<% } else { %>
-		<li><a href='<%= base_url + i %>'><%= i %></a></li>
-		<% } %>
-		<% } %>
-
-		<% if (page_end < pages ) { %>
-		<li class="disabled"><a>...</a></li>
-		<% } %>
-
-		<% if (current_page == pages) { %>
-		<li class='disabled'><a><span class="hide-on-mobile">末页</span><i class="fa fa-angle-right"></i></a></li>
-		<% } else { %>
-		<li><a href='<%= base_url + pages %>'><span class="hide-on-mobile">末页</span><i class="fa fa-angle-right"></i></a></li>
-		<% } %>
-	</ul>
+    <li>
+      <a href="<%= base_url %>1"
+        ><i class="fa fa-angle-left"></i
+        ><span class="hide-on-mobile">Home</span></a
+      >
+    </li>
+    <% } %> <% var page_start = current_page - 2 > 0 ? current_page - 2 : 1; var
+    page_end = page_start + 4 >= pages ? pages : page_start + 4; %> <% if
+    (page_start > 1) { %>
+    <li class="disabled"><a>...</a></li>
+    <% } %> <% for(var i = page_start; i <= page_end; i++) { %> <% if (i ===
+    current_page) { %>
+    <li class="disabled"><a><%= i %></a></li>
+    <% } else { %>
+    <li><a href="<%= base_url + i %>"><%= i %></a></li>
+    <% } %> <% } %> <% if (page_end < pages ) { %>
+    <li class="disabled"><a>...</a></li>
+    <% } %> <% if (current_page == pages) { %>
+    <li class="disabled">
+      <a
+        ><span class="hide-on-mobile">Last page</span
+        ><i class="fa fa-angle-right"></i
+      ></a>
+    </li>
+    <% } else { %>
+    <li>
+      <a href="<%= base_url + pages %>"
+        ><span class="hide-on-mobile">Last page</span
+        ><i class="fa fa-angle-right"></i
+      ></a>
+    </li>
+    <% } %>
+  </ul>
 </div>
 
 <script>
   $(document).ready(function () {
-	var $nav = $('.pagewrap');
-	var current_page = $nav.attr('current_page');
-	if (current_page) {
-	  $nav.find('li').each(function () {
-		var $li = $(this);
-		var $a = $li.find('a');
-		if ($a.html() == current_page) {
-		  $li.addClass('active');
-		  $a.removeAttr('href');
-		}
-	  });
-	}
+    var $nav = $(".pagewrap");
+    var current_page = $nav.attr("current_page");
+    if (current_page) {
+      $nav.find("li").each(function () {
+        var $li = $(this);
+        var $a = $li.find("a");
+        if ($a.html() == current_page) {
+          $li.addClass("active");
+          $a.removeAttr("href");
+        }
+      });
+    }
   });
 </script>

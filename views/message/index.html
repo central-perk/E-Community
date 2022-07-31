@@ -1,30 +1,30 @@
 <%- partial('../sidebar') %>
 
-<div id='content'>
-  <div class='panel'>
-    <div class='header'>
-      <ul class='breadcrumb'>
-        <li><a href='/'>主页</a><span class='divider'>/</span></li>
-        <li class='active'>新消息</li>
+<div id="content">
+  <div class="panel">
+    <div class="header">
+      <ul class="breadcrumb">
+        <li><a href="/">Home</a><span class="divider">/</span></li>
+        <li class="active">New message</li>
       </ul>
     </div>
-    <% if (typeof(hasnot_read_messages) !== 'undefined' && hasnot_read_messages.length > 0) { %>
-    <%- partial('../message/message', { collection: hasnot_read_messages, as: 'message' }) %>
-    <% } else { %>
-    <div class='inner'>
-      <p>无消息</p>
+    <% if (typeof(hasnot_read_messages) !== 'undefined' &&
+    hasnot_read_messages.length > 0) { %> <%- partial('../message/message', {
+    collection: hasnot_read_messages, as: 'message' }) %> <% } else { %>
+    <div class="inner">
+      <p>No news</p>
     </div>
     <% } %>
   </div>
-  <div class='panel'>
-    <div class='header'>
-      <span class='col_fade'>过往信息</span>
+  <div class="panel">
+    <div class="header">
+      <span class="col_fade">Past information</span>
     </div>
-    <% if (typeof(has_read_messages) !== 'undefined' && has_read_messages.length > 0) { %>
-    <%- partial('../message/message', { collection: has_read_messages, as: 'message' }) %>
-    <% } else { %>
-    <div class='inner'>
-      <p>无消息</p>
+    <% if (typeof(has_read_messages) !== 'undefined' && has_read_messages.length
+    > 0) { %> <%- partial('../message/message', { collection: has_read_messages,
+    as: 'message' }) %> <% } else { %>
+    <div class="inner">
+      <p>No news</p>
     </div>
     <% } %>
   </div>
