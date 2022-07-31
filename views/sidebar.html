@@ -1,0 +1,98 @@
+<div id="sidebar" class="pull-right">
+
+
+	<!-- 我的话题 -->
+	<!-- 没有话题则隐藏 -->
+	<% if (typeof(current_user) !== 'undefined') { %>
+		<% if(user_topics) {%>
+		<div class="panel">
+			<div class='header'>
+				<span>我的话题</span>
+				<a href="/user/<%= current_user.nickname %>/topics" class="pull-right">
+					更多
+				</a>
+			</div>
+			<% if (user_topics.length > 0) { %>
+				<ul class="unstyled">
+					<%- partial('topic/small', { collection: user_topics, as: 'topic' }) %>
+				</ul>
+				<% } else { %>
+				<ul class="unstyled">
+				    <li>无</li>
+				</ul>
+			<% } %>
+		</div>
+		<% } %>
+	<% } %>
+	<!-- 板块 -->
+	<div class="panel">
+		<div class='header'>
+			 <span>板块</span>
+		</div>
+		<ul class="inner" id="sidebar">
+			<%  tab = tab || 'all';
+				[['all', '所有话题']].concat(tabs).forEach(function (pair) {
+				var value = pair[0];
+				var text = pair[1]; %>
+				<li data-tab="<%= value %>">
+					<a href="<%= value ? '/?tab=' + value : '/' %>"
+						class="<%= value === tab ? 'current-tab active' : '' %>"><%= text %></a>
+					<span class="pull-right count"></span>
+				</li>
+			<% }) %>
+		</ul>
+	</div>
+
+	<!--  -->
+	<div class="panel">
+		<div class='header'>
+			<span>关注易传单—微信公众号</span>
+		</div>
+		<ul class="inner">
+			<li>
+				<img class="full-size" src="./public/images/brand/icon/icon_260.png">
+			</li>
+		</ul>
+	</div>
+
+<!--   <% if (typeof(current_user) === 'undefined' || !current_user.isAdvanced) { %>
+		<%- partial('./_ads') %>
+	<% } %>
+
+	<% if (typeof(no_reply_topics) !== 'undefined') { %>
+	<div class='panel'>
+		<div class='header'>
+			<span class='col_fade'>无人回复的话题</span>
+		</div>
+		<div class='inner'>
+			<% if (no_reply_topics.length > 0) { %>
+			<ul class="unstyled">
+				<%- partial('topic/small', { collection: no_reply_topics, as: 'topic' }) %>
+			</ul>
+			<% } else { %>
+			<p>无</p>
+			<% } %>
+		</div>
+	</div>
+	<% } %> -->
+
+	<!-- <% if (typeof(tops) !== 'undefined') { %>
+	<div class='panel'>
+		<div class='header'>
+			<span class='col_fade'>积分榜</span>
+			&nbsp;
+			<a class='dark' href='/users/top100'>TOP 100 &gt;&gt;</a>
+		</div>
+		<div class='inner'>
+			<% if (tops.length > 0) { %>
+			<ol>
+				<%- partial('user/top', { collection: tops, as: 'user' }) %>
+			</ol>
+			<% } else { %>
+			<p>无</p>
+			<% } %>
+		</div>
+	</div>
+	<% } %> -->
+
+</div>

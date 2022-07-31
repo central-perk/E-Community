@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<!-- meta -->
+	<meta charset="utf-8"/>
+	<meta name='description' content='<%= config.description %>'>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<meta name="keywords" content="<%= config.keywords %>"/>
+	<meta name="apple-itunes-app" content="app-id=954734793">
+	<!-- see http://smerity.com/articles/2013/where_did_all_the_http_referrers_go.html -->
+	<meta name="referrer" content="always">
+
+	<%
+	var headers = config.site_headers || [];
+	for (var i = 0, l = headers.length; i < l; i++) {
+	%>
+	<%- headers[i] %>
+	<% } %>
+
+	<link title="RSS" type="application/rss+xml" rel="alternate" href="/rss"/>
+
+	<% if (config.site_icon) { %>
+	<link rel="icon" href="<%- staticFile(config.site_icon) %>" type="image/x-icon"/>
+	<% } %>
+
+	<!-- style -->
+	<link rel="stylesheet" href="/public/libs/bootstrap/css/bootstrap.css" />
+	<link rel="stylesheet" href="/public/stylesheets/common.css" />
+	<link rel="stylesheet" href="/public/stylesheets/style.css" />
+
+	<link rel="stylesheet" href="/public/stylesheets/responsive.css" />
+	<link rel="stylesheet" href="/public/stylesheets/jquery.atwho.css" />
+	<link rel="stylesheet" href="/public/libs/simditor/styles/simditor.css" />
+	<link rel="stylesheet" href="/public/libs/simditor-mention/simditor-mention.css" />
+	<link rel="stylesheet" href="/public/libs/webuploader/webuploader.css" />
+	<link rel="stylesheet" href="/public/libs/code-prettify/prettify.css" />
+	<link rel="stylesheet" href="/public/libs/webuploader/webuploader.css" />
+	<link rel="stylesheet" href="/public/libs/font-awesome/css/font-awesome.css" />
+
+
+<!-- 	<script type="text/javascript" src="[script path]/module.js"></script> <script type="text/javascript" src="[script path]/hotkeys.js"></script> <script type="text/javascript" src="[script path]/uploader.js"></script> <script type="text/javascript" src="[script path]/simditor.js"></script> -->
+
+
+	<!-- scripts -->
+	<script src="/public/libs/jquery-2.1.0.js"></script>
+	<script src="/public/libs/lodash.compat.js"></script>
+	<script src="/public/libs/jquery-ujs.js"></script>
+	<script src="/public/libs/bootstrap/js/bootstrap.js"></script>
+	<script src="/public/libs/jquery.caret.js"></script>
+	<script src="/public/javascripts/main.js"></script>
+	<script src="/public/javascripts/responsive.js"></script>
+
+	<% if (typeof(topic) !== 'undefined') { %>
+	<title><%= topic.title %> - <%= config.name %></title>
+	<% } else if (typeof(pageTitle) !== 'undefined') { %>
+	<title><%= pageTitle %> - <%= config.name %></title>
+	<% } else { %>
+	<title><%= config.description %></title>
+	<% } %>
+	<meta content="_csrf" name="csrf-param">
+	<meta content="<%= csrf %>" name="csrf-token">
+</head>
+<body>
+	<header class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="brand" href="<%=config.hosts.home%>">
+					<img src="<%- staticFile(config.site_logo) %>" />
+				</a>
+
+				<button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+			<div class="navbar-collapse collapsers collapse" style="height: auto;" role="navigation">
+				<ul class="nav navbar-nav pull-right">
+
+
+					<% if (typeof(current_user) === 'undefined') { %>
+					<!-- 登陆前 -->
+					<li>
+						<a  href="/echuandan">首页</a>
+					</li>
+					<li>
+						<a  href="/?tab=all" class="active">易坛子</a>
+					</li>
+					<li>
+						<a  href="/signup.html">注册</a>
+					</li>
+					<li>
+						<a  href="/signin.html">登录</a>
+					</li>
+					<% }  else  { %>
+					<!-- 登陆后 -->
+
+					<!-- m -->
+					<li class="hide-on-pc">
+						<a  href="/echuandan">首页</a>
+					</li>
+					<li class="hide-on-pc">
+						<a  href="/?tab=all" class="active">易坛子</a>
+					</li>
+					<li class="hide-on-pc">
+						<a onClick="javascript:window.location.replace('\/signout')">
+							退出
+						</a>
+					</li>
+
+					<!-- pc -->
+					<li class="hide-on-mobile">
+						<a href="/u">我的主页</a>
+					</li>
+
+					<li class="hide-on-mobile">
+						<a href="http://echuandan.com/tpl-center">模板中心</a>
+					</li>
+					<li class="hide-on-mobile">
+						<a href="/plaza" >易秀场</a>
+					</li>
+					<li class="hide-on-mobile">
+						<a  href="/?tab=all" class="active">易坛子</a>
+					</li>
+					<li class="hide-on-mobile">
+						<a class="messages"  href="/messages">
+							<i class="sprite"></i>
+						</a>
+					</li>
+
+					<li class="dropdown hide-on-mobile">
+						<a class="avatar dropdown-toggle" data-toggle="dropdown">
+							<img id="user-head" src="<%= current_user.head||current_user.headUrl %>">
+							<i class="fa fa-caret-down"></i>
+						</a>
+						<ul class="dropdown-menu" role="menu">
+							<li>
+								<a href="/account">
+									<i class="fa fa-coffee"></i>
+									<span class="nickname"><%= current_user.nickname %></span>
+
+									<!-- <span class="nickname" ng-bind="user.nickname"></span>
+									<span class="badge badge-agent" ng-if="user.isAgent">VIP</span>
+									<span class="badge badge-advanced" ng-if="user.isAdvanced">VIP</span> -->
+								</a>
+							</li>
+							<li>
+								<a href="/account/manage">
+									<i class="fa fa-jpy"></i>付费去尾页
+								</a>
+							</li>
+							<li>
+								<a href="http://club.echuandan.com/topic/54e804306fd1ca402b2ad057" target="_blank">
+									<i class="fa fa-book"></i>新手教程
+								</a>
+							</li>
+							<li class="divider"></li>
+							<li>
+								<a onClick="javascript:window.location.replace('\/signout')">
+									<i class="fa fa-power-off"></i>
+									退出
+								</a>
+							</li>
+						</ul>
+					</li>
+
+
+
+					<% } %>
+
+
+
+
+					<% if (typeof(current_user) !== 'undefined') { %>
+
+					<% } %>
+				</ul>
+			</div>
+		</div>
+		<!-- <i class="fa fa-bars top-menu-btn"></i> -->
+	</header>
+
+
+	<ul class="top-menu open">
+		<%  tab = tab||'all';
+			[['all', '所有话题']].concat(tabs).forEach(function (pair) {
+			var value = pair[0];
+			var text = pair[1]; %>
+			<li data-tab="<%= value %>">
+				<a href="<%= value ? '/?tab=' + value : '/' %>"
+					class="<%= value === tab ? 'current-tab active' : '' %>"><%= text %></a>
+				<span class="pull-right count"></span>
+			</li>
+		<% }) %>
+	</ul>
+
+	<% if (typeof(current_user) !== 'undefined') { %>
+	<div class="top-bar">
+		<div class="container">
+			<a class="create-topic btn btn-lg btn-green pull-left" href="/topic/create">我要来一发</a>
+			<form id='search_form' class="navbar-search pull-right" action="/search">
+				<input class="search-query" type="text" id="q" name="q" placeholder="搜索话题"/>
+			</form>
+		</div>
+	</div>
+	<% } %>
+
+
+	<div id='main'>
+		<div class="container">
+			<%- body %>
+		</div>
+	</div>
+	<div id='backtotop'>回到顶部</div>
+
+
+	<div id="sidebar-mask"></div>
+
+	<% if (config.google_tracker_id) { %>
+	<script>
+		// google analytics
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', '<%-config.google_tracker_id%>', 'auto');
+		ga('send', 'pageview');
+	</script>
+	<% } %>
+
+	<% if (config.cnzz_tracker_id) { %>
+	<div style="display:none;">
+		<script src="//s95.cnzz.com/z_stat.php?id=<%- config.cnzz_tracker_id %>&web_id=<%- config.cnzz_tracker_id %>" language="JavaScript"></script>
+	</div>
+	<% } %>
+
+	<!--百度统计-->
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+		var hm = document.createElement("script");
+		hm.src = "//hm.baidu.com/hm.js?35893c3a64f4c6b15893ede38d2adc2c";
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+	<!--百度统计-->
+
+</body>
+</html>
